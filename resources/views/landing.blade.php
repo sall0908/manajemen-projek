@@ -39,13 +39,13 @@
 </head>
 <body class="antialiased bg-white">
     <div class="relative min-h-screen bg-gradient-blue">
-        <div class="container mx-auto px-4 py-32 flex flex-col items-center justify-center text-center h-screen">
-            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Selamat Datang di Web Manajemen Proyek</h1>
-            <h2 class="text-3xl md:text-4xl font-semibold text-blue-100 mb-8">ITSME</h2>
-            <p class="text-xl text-white mb-12 max-w-2xl">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 flex flex-col items-center justify-center text-center min-h-screen">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Selamat Datang di Web Manajemen Proyek</h1>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold text-blue-100 mb-6 sm:mb-8">ITSME</h2>
+            <p class="text-base sm:text-lg md:text-xl text-white mb-8 sm:mb-12 max-w-2xl px-4">
                 Platform manajemen proyek yang membantu Anda mengelola tugas, kolaborasi tim, dan mencapai tujuan proyek dengan lebih efisien.
             </p>
-            <a href="{{ route('login') }}" class="btn-primary text-white font-bold py-3 px-8 rounded-full text-xl">
+            <a href="{{ route('login') }}" class="btn-primary text-white font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-full text-lg sm:text-xl">
                 Mulai
             </a>
         </div>
@@ -57,28 +57,28 @@
         </div>
     </div>
 
-    <div class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-blue-800 mb-3">Manajemen Tugas</h3>
-                    <p class="text-gray-700">Kelola tugas proyek dengan mudah dan efisien. Tetapkan tenggat waktu, prioritas, dan pantau kemajuan.</p>
+    <div class="py-12 sm:py-16 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div class="bg-blue-50 p-5 sm:p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg sm:text-xl font-semibold text-blue-800 mb-3">Manajemen Tugas</h3>
+                    <p class="text-sm sm:text-base text-gray-700">Kelola tugas proyek dengan mudah dan efisien. Tetapkan tenggat waktu, prioritas, dan pantau kemajuan.</p>
                 </div>
-                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-blue-800 mb-3">Kolaborasi Tim</h3>
-                    <p class="text-gray-700">Bekerja sama dengan tim Anda secara real-time. Bagikan dokumen, diskusikan ide, dan selesaikan proyek bersama.</p>
+                <div class="bg-blue-50 p-5 sm:p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg sm:text-xl font-semibold text-blue-800 mb-3">Kolaborasi Tim</h3>
+                    <p class="text-sm sm:text-base text-gray-700">Bekerja sama dengan tim Anda secara real-time. Bagikan dokumen, diskusikan ide, dan selesaikan proyek bersama.</p>
                 </div>
-                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-blue-800 mb-3">Analisis Proyek</h3>
-                    <p class="text-gray-700">Dapatkan wawasan tentang kinerja proyek Anda dengan analisis dan laporan yang komprehensif.</p>
+                <div class="bg-blue-50 p-5 sm:p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg sm:text-xl font-semibold text-blue-800 mb-3">Analisis Proyek</h3>
+                    <p class="text-sm sm:text-base text-gray-700">Dapatkan wawasan tentang kinerja proyek Anda dengan analisis dan laporan yang komprehensif.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="bg-blue-900 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p>&copy; {{ date('Y') }} Manajemen Proyek ITSME. All rights reserved.</p>
+    <footer class="bg-blue-900 text-white py-6 sm:py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm sm:text-base">&copy; {{ date('Y') }} Manajemen Proyek ITSME. All rights reserved.</p>
         </div>
     </footer>
 </body>

@@ -25,8 +25,11 @@ class CardController extends Controller
             'created_by'  => auth()->user()->user_id,
         ]);
 
-        // Attach the user to the card
-        $card->assignedUsers()->attach($request->user_id, ['assigned_at' => now()]);
+        // Attach the user to the card dengan assignment_status
+        $card->assignedUsers()->attach($request->user_id, [
+            'assigned_at' => now(),
+            'assignment_status' => 'assigned'
+        ]);
 
         return back()->with('success', 'Card created successfully.');
     }

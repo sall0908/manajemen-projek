@@ -18,6 +18,14 @@ class ReportController extends Controller
         // ambil data semua user + jumlah projek
         $users = User::withCount(['projectsAsLeader', 'projectsAsMember'])->get();
 
+        // untuk admin, tampilkan jumlah proyek yang dibuat secara global
+        $totalProjects = Project::count();
+        foreach ($users as $u) {
+            if ($u->role === 'admin') {
+                $u->projects_created_admin_count = $totalProjects;
+            }
+        }
+
         return view('admin.reports.users', compact('users'));
     }
 
@@ -31,6 +39,7 @@ class ReportController extends Controller
         $projectsCompleted = 0;
         $projectsDeleted = 0; // Tidak bisa track karena hard delete
         $projectsCreated = collect();
+        $projectsJoined = collect();
 
         // Data untuk Developer/Designer
         $subTasksCreated = 0;
@@ -39,27 +48,35 @@ class ReportController extends Controller
         $timeLogs = collect();
         $assignedCards = collect();
 
-        if ($user->role === 'teamleader') {
-            // Jumlah card yang dibuat oleh team leader
+        if ($user->role === 'teamlead') {
             $cardsCreated = Card::where('created_by', $user->user_id)->count();
-
-            // Jumlah proyek yang ditandai selesai (status = 'done' dan created_by = user_id)
             $projectsCompleted = Project::where('created_by', $user->user_id)
                 ->where('status', 'done')
                 ->count();
 
-            // Proyek yang dibuat oleh team leader (untuk ditampilkan)
-            $projectsCreated = Project::where('created_by', $user->user_id)
+            $projectsJoined = Project::where(function($q) use ($user) {
+                    $q->where('created_by', $user->user_id)
+                      ->orWhereHas('members', function ($query) use ($user) {
+                          $query->where('project_members.user_id', $user->user_id);
+                      });
+                })
                 ->withCount('cards')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } elseif ($user->role === 'admin') {
+            $projectsCreated = Project::withCount('cards')
                 ->orderBy('created_at', 'desc')
                 ->get();
         } else {
             // Untuk Developer/Designer
-            // Ambil semua card yang di-assign ke user ini
-            $assignedCardIds = DB::table('card_assignments')
-                ->where('user_id', $user->user_id)
-                ->pluck('card_id')
-                ->toArray();
+            // Ambil semua card yang di-assign ke user ini menggunakan relasi Eloquent
+            $assignedCards = $user->assignedCards()
+                ->with('project')
+                ->withCount('subTasks')
+                ->get();
+
+            // Ambil card IDs untuk query lainnya
+            $assignedCardIds = $assignedCards->pluck('card_id')->toArray();
 
             // Sub-task dari card yang di-assign (kita anggap sub-task dibuat oleh user yang di-assign ke card)
             $subTasksCreated = SubTask::whereIn('card_id', $assignedCardIds)->count();
@@ -79,10 +96,9 @@ class ReportController extends Controller
                 ->whereNotNull('end_time')
                 ->sum('duration_seconds') ?? 0;
 
-            // Card yang di-assign ke user (untuk ditampilkan)
-            $assignedCards = Card::whereIn('card_id', $assignedCardIds)
-                ->with('project')
-                ->withCount('subTasks')
+            $projectsJoined = $user->projectsAsMember()
+                ->withCount('cards')
+                ->orderBy('created_at', 'desc')
                 ->get();
         }
 
@@ -106,11 +122,12 @@ class ReportController extends Controller
         ];
 
         // Tambahkan data khusus berdasarkan role
-        if ($user->role === 'teamleader') {
+        if ($user->role === 'admin') {
             $data['projectsCreated'] = $projectsCreated;
-        } else {
+        } elseif ($user->role !== 'teamlead') {
             $data['assignedCards'] = $assignedCards;
         }
+        $data['projectsJoined'] = $projectsJoined;
 
         return view('admin.reports.user-detail', $data);
     }
@@ -176,12 +193,12 @@ class ReportController extends Controller
 
         // Anggota tim dengan detail
         $teamMembers = $project->members->map(function($member) use ($project) {
-            // Card yang di-assign ke member ini
-            $assignedCardIds = DB::table('card_assignments')
-                ->where('user_id', $member->user_id)
+            // Card yang di-assign ke member ini menggunakan relasi Eloquent
+            $assignedCards = $member->assignedCards()
                 ->whereIn('card_id', $project->cards->pluck('card_id'))
-                ->pluck('card_id')
-                ->toArray();
+                ->get();
+            
+            $assignedCardIds = $assignedCards->pluck('card_id')->toArray();
 
             // Sub-task dari card yang di-assign
             $subTasksCount = SubTask::whereIn('card_id', $assignedCardIds)->count();
@@ -226,6 +243,7 @@ class ReportController extends Controller
         $projectsCompleted = 0;
         $projectsDeleted = 0;
         $projectsCreated = collect();
+        $projectsJoined = collect();
 
         // Data untuk Developer/Designer
         $subTasksCreated = 0;
@@ -234,20 +252,34 @@ class ReportController extends Controller
         $timeLogs = collect();
         $assignedCards = collect();
 
-        if ($user->role === 'teamleader') {
+        if ($user->role === 'teamlead') {
             $cardsCreated = Card::where('created_by', $user->user_id)->count();
             $projectsCompleted = Project::where('created_by', $user->user_id)
                 ->where('status', 'done')
                 ->count();
-            $projectsCreated = Project::where('created_by', $user->user_id)
+
+            $projectsJoined = Project::where(function($q) use ($user) {
+                    $q->where('created_by', $user->user_id)
+                      ->orWhereHas('members', function ($query) use ($user) {
+                          $query->where('project_members.user_id', $user->user_id);
+                      });
+                })
                 ->withCount('cards')
                 ->orderBy('created_at', 'desc')
                 ->get();
+        } elseif ($user->role === 'admin') {
+            $projectsCreated = Project::withCount('cards')
+                ->orderBy('created_at', 'desc')
+                ->get();
         } else {
-            $assignedCardIds = DB::table('card_assignments')
-                ->where('user_id', $user->user_id)
-                ->pluck('card_id')
-                ->toArray();
+            // Untuk Developer/Designer - gunakan relasi Eloquent
+            $assignedCards = $user->assignedCards()
+                ->with('project')
+                ->withCount('subTasks')
+                ->get();
+
+            // Ambil card IDs untuk query lainnya
+            $assignedCardIds = $assignedCards->pluck('card_id')->toArray();
 
             $subTasksCreated = SubTask::whereIn('card_id', $assignedCardIds)->count();
             $subTasksCompleted = SubTask::whereIn('card_id', $assignedCardIds)
@@ -264,9 +296,9 @@ class ReportController extends Controller
                 ->whereNotNull('end_time')
                 ->sum('duration_seconds') ?? 0;
 
-            $assignedCards = Card::whereIn('card_id', $assignedCardIds)
-                ->with('project')
-                ->withCount('subTasks')
+            $projectsJoined = $user->projectsAsMember()
+                ->withCount('cards')
+                ->orderBy('created_at', 'desc')
                 ->get();
         }
 
@@ -287,11 +319,12 @@ class ReportController extends Controller
             'totalTimeWorked' => $totalTimeWorked,
         ];
 
-        if ($user->role === 'teamleader') {
+        if ($user->role === 'admin') {
             $data['projectsCreated'] = $projectsCreated;
-        } else {
+        } elseif ($user->role !== 'teamlead') {
             $data['assignedCards'] = $assignedCards;
         }
+        $data['projectsJoined'] = $projectsJoined;
 
         try {
             // Gunakan service container langsung
@@ -344,11 +377,12 @@ class ReportController extends Controller
         $formattedTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 
         $teamMembers = $project->members->map(function($member) use ($project) {
-            $assignedCardIds = DB::table('card_assignments')
-                ->where('user_id', $member->user_id)
+            // Card yang di-assign ke member ini menggunakan relasi Eloquent
+            $assignedCards = $member->assignedCards()
                 ->whereIn('card_id', $project->cards->pluck('card_id'))
-                ->pluck('card_id')
-                ->toArray();
+                ->get();
+            
+            $assignedCardIds = $assignedCards->pluck('card_id')->toArray();
 
             $subTasksCount = SubTask::whereIn('card_id', $assignedCardIds)->count();
             $subTasksCompletedCount = SubTask::whereIn('card_id', $assignedCardIds)

@@ -25,7 +25,7 @@
                 <p class="text-gray-600 mb-1"><strong>Username:</strong> {{ $user->username }}</p>
                 <div class="flex items-center gap-4 mt-3">
                     <span class="px-4 py-2 rounded-full text-sm font-semibold
-                        {{ $user->role === 'admin' ? 'bg-blue-700 text-white' : ($user->role === 'teamleader' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-blue-800') }}">
+                        {{ $user->role === 'admin' ? 'bg-blue-700 text-white' : ($user->role === 'teamlead' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-blue-800') }}">
                         {{ ucfirst($user->role) }}
                     </span>
                     <span class="px-4 py-2 rounded-full text-sm font-semibold
@@ -37,10 +37,8 @@
         </div>
     </div>
 
-    @if($user->role === 'teamleader')
-        <!-- Laporan Team Leader -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <!-- Card Created -->
+    @if($user->role === 'teamlead')
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div class="bg-white shadow-md rounded-xl p-6 border border-blue-100">
                 <div class="flex items-center justify-between">
                     <div>
@@ -50,31 +48,57 @@
                     <div class="text-4xl">📋</div>
                 </div>
             </div>
-
-            <!-- Projects Completed -->
             <div class="bg-white shadow-md rounded-xl p-6 border border-blue-100">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-600 text-sm mb-1">Proyek Selesai</p>
-                        <p class="text-3xl font-bold text-green-700">{{ $projectsCompleted }}</p>
+                        <p class="text-gray-600 text-sm mb-1">Total Proyek Diikuti</p>
+                        <p class="text-3xl font-bold text-purple-700">{{ $projectsJoined->count() }}</p>
                     </div>
-                    <div class="text-4xl">✅</div>
-                </div>
-            </div>
-
-            <!-- Projects Created -->
-            <div class="bg-white shadow-md rounded-xl p-6 border border-blue-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-600 text-sm mb-1">Total Proyek Dibuat</p>
-                        <p class="text-3xl font-bold text-purple-700">{{ $projectsCreated->count() }}</p>
-                    </div>
-                    <div class="text-4xl">📁</div>
+                    <div class="text-4xl">👥</div>
                 </div>
             </div>
         </div>
 
-        <!-- Daftar Proyek yang Dibuat -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden border border-blue-100 mb-6">
+            <div class="bg-blue-600 text-white px-6 py-4">
+                <h3 class="text-xl font-bold">👥 Daftar Proyek yang Diikuti</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead class="bg-blue-50">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-semibold text-gray-700">Nama Proyek</th>
+                            <th class="py-3 px-4 text-left font-semibold text-gray-700">Status</th>
+                            <th class="py-3 px-4 text-left font-semibold text-gray-700">Jumlah Card</th>
+                            <th class="py-3 px-4 text-left font-semibold text-gray-700">Deadline</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse($projectsJoined as $project)
+                            <tr class="hover:bg-blue-50">
+                                <td class="py-3 px-4 text-gray-800 font-medium">{{ $project->project_name }}</td>
+                                <td class="py-3 px-4">
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                        {{ $project->status === 'done' ? 'bg-green-100 text-green-700' :
+                                           ($project->status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
+                                           ($project->status === 'review' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-700')) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $project->status)) }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4 text-center text-blue-700 font-semibold">{{ $project->cards_count }}</td>
+                                <td class="py-3 px-4 text-gray-600">{{ $project->deadline ? \Carbon\Carbon::parse($project->deadline)->format('d M Y') : '-' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="py-8 text-center text-gray-500">Belum mengikuti proyek</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    @elseif($user->role === 'admin')
         <div class="bg-white shadow-md rounded-xl overflow-hidden border border-blue-100 mb-6">
             <div class="bg-blue-600 text-white px-6 py-4">
                 <h3 class="text-xl font-bold">📁 Daftar Proyek yang Dibuat</h3>
@@ -119,7 +143,6 @@
                 </table>
             </div>
         </div>
-
     @else
         <!-- Laporan Developer/Designer -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
@@ -165,6 +188,45 @@
                     </div>
                     <div class="text-4xl">📊</div>
                 </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-md rounded-xl overflow-hidden border border-blue-100 mb-6">
+            <div class="bg-blue-600 text-white px-6 py-4">
+                <h3 class="text-xl font-bold">👥 Daftar Proyek yang Diikuti</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead class="bg-blue-50">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-semibold text-gray-700">Nama Proyek</th>
+                            <th class="py-3 px-4 text-left font-semibold text-gray-700">Status</th>
+                            <th class="py-3 px-4 text-left font-semibold text-gray-700">Jumlah Card</th>
+                            <th class="py-3 px-4 text-left font-semibold text-gray-700">Deadline</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse($projectsJoined as $project)
+                            <tr class="hover:bg-blue-50">
+                                <td class="py-3 px-4 text-gray-800 font-medium">{{ $project->project_name }}</td>
+                                <td class="py-3 px-4">
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                        {{ $project->status === 'done' ? 'bg-green-100 text-green-700' :
+                                           ($project->status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
+                                           ($project->status === 'review' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-700')) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $project->status)) }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4 text-center text-blue-700 font-semibold">{{ $project->cards_count }}</td>
+                                <td class="py-3 px-4 text-gray-600">{{ $project->deadline ? \Carbon\Carbon::parse($project->deadline)->format('d M Y') : '-' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="py-8 text-center text-gray-500">Belum mengikuti proyek</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
 

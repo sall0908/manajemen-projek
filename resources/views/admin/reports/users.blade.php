@@ -57,7 +57,7 @@
                     <div>
                         <p class="text-gray-600 text-xs sm:text-sm mb-1">Team Leaders</p>
                         <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-purple-700">
-                            {{ $users->where('role', 'teamleader')->count() }}
+                            {{ $users->where('role', 'teamlead')->count() }}
                         </p>
                     </div>
                     <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-purple-100 rounded-lg sm:rounded-xl flex items-center justify-center">
@@ -102,7 +102,7 @@
                     @php
                         if ($user->role === 'admin') {
                             $roleClass = 'bg-blue-600 text-white border border-blue-600';
-                        } elseif ($user->role === 'teamleader') {
+                        } elseif ($user->role === 'teamlead') {
                             $roleClass = 'bg-purple-500 text-white border border-purple-500';
                         } elseif ($user->role === 'developer') {
                             $roleClass = 'bg-green-100 text-green-800 border border-green-200';
@@ -144,13 +144,13 @@
                             <div class="text-center">
                                 <p class="text-xs text-gray-600 mb-1">Project Dibuat</p>
                                 <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-semibold">
-                                    {{ $user->projects_as_leader_count }}
+                                    {{ $user->role === 'admin' ? ($user->projects_created_admin_count ?? 0) : $user->projects_as_leader_count }}
                                 </span>
                             </div>
                             <div class="text-center">
                                 <p class="text-xs text-gray-600 mb-1">Project Diikuti</p>
                                 <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-semibold">
-                                    {{ $user->projects_as_member_count }}
+                                    {{ $user->role === 'teamlead' ? ($user->projects_as_member_count + $user->projects_as_leader_count) : $user->projects_as_member_count }}
                                 </span>
                             </div>
                         </div>
@@ -188,7 +188,7 @@
                             @php
                                 if ($user->role === 'admin') {
                                     $roleClass = 'bg-blue-600 text-white border border-blue-600';
-                                } elseif ($user->role === 'teamleader') {
+                                } elseif ($user->role === 'teamlead') {
                                     $roleClass = 'bg-purple-500 text-white border border-purple-500';
                                 } elseif ($user->role === 'developer') {
                                     $roleClass = 'bg-green-100 text-green-800 border border-green-200';
@@ -247,14 +247,14 @@
                                 <!-- Project Dibuat -->
                                 <td class="py-4 px-6 text-center">
                                     <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
-                                        {{ $user->projects_as_leader_count }}
+                                        {{ $user->role === 'admin' ? ($user->projects_created_admin_count ?? 0) : $user->projects_as_leader_count }}
                                     </span>
                                 </td>
 
                                 <!-- Project Diikuti -->
                                 <td class="py-4 px-6 text-center">
                                     <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">
-                                        {{ $user->projects_as_member_count }}
+                                        {{ $user->role === 'teamlead' ? ($user->projects_as_member_count + $user->projects_as_leader_count) : $user->projects_as_member_count }}
                                     </span>
                                 </td>
 

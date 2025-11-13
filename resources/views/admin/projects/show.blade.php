@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-6">
-    <div class="container mx-auto px-4 sm:px-6">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-4 sm:py-6">
+    <div class="container mx-auto px-3 sm:px-4 lg:px-6">
         {{-- Header --}}
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
-            <div>
-                <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8">
+            <div class="mb-4 sm:mb-0">
+                <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
                     Detail Project
                 </h2>
-                <p class="text-gray-600 mt-2">{{ $project->project_name }}</p>
+                <p class="text-gray-600 mt-2 text-sm sm:text-base">{{ $project->project_name }}</p>
             </div>
             <a href="{{ route('admin.projects') }}"
-               class="mt-4 sm:mt-0 text-blue-600 hover:text-blue-800 font-medium flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               class="text-sm sm:text-base text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
                 Kembali ke Daftar Project
@@ -21,12 +21,12 @@
         </div>
 
         {{-- Grid Layout --}}
-        <div class="grid lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
             {{-- Sidebar Info --}}
             <div class="lg:col-span-1 space-y-6">
                 {{-- Info Utama --}}
-                <div class="bg-white rounded-2xl shadow-xl p-6 border border-blue-100">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 border border-blue-100">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
                         <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -72,8 +72,8 @@
                 </div>
 
                 {{-- Anggota Tim --}}
-                <div class="bg-white rounded-2xl shadow-xl p-6 border border-blue-100">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 border border-blue-100">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
                         <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
@@ -111,10 +111,10 @@
 
                     {{-- Form tambah member by name (Admin) --}}
                     <div class="mt-4 border-t pt-4">
-                        <form action="{{ route('admin.projects.inviteMembers', $project->project_id) }}" method="POST" class="flex gap-2">
+                        <form action="{{ route('admin.projects.inviteMembers', $project->project_id) }}" method="POST" class="flex flex-col sm:flex-row gap-2">
                             @csrf
-                            <input type="text" name="member_name" required placeholder="Nama lengkap atau username (developer/designer)" class="flex-1 border rounded-xl px-3 py-2">
-                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-xl">Tambahkan</button>
+                            <input type="text" name="member_name" required placeholder="Nama lengkap atau username (developer/designer)" class="flex-1 border rounded-lg sm:rounded-xl px-3 py-2 text-sm">
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg sm:rounded-xl text-sm sm:text-base whitespace-nowrap">Tambahkan</button>
                         </form>
                         <p class="text-xs text-gray-500 mt-2">Masukkan nama lengkap atau username, hanya developer/designer dapat ditambahkan. Sistem akan menolak bila user sudah memiliki proyek aktif.</p>
                     </div>
@@ -131,8 +131,8 @@
                     $seconds = $totalSeconds % 60;
                     $totalFormatted = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
                 @endphp
-                <div class="bg-white rounded-2xl shadow-xl p-6 border border-blue-100">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 border border-blue-100">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
                         <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -148,8 +148,8 @@
             {{-- Konten Utama --}}
             <div class="lg:col-span-3">
                 {{-- Deskripsi Project --}}
-                <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border border-blue-100">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 mb-4 sm:mb-6 border border-blue-100">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-3 flex items-center">
                         <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
                         </svg>
@@ -159,9 +159,9 @@
                 </div>
 
                 {{-- Kartu & Subtask --}}
-                <div class="bg-white rounded-2xl shadow-xl p-6 border border-blue-100">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 border border-blue-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3">
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-800 flex items-center">
                             <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                             </svg>
@@ -190,7 +190,7 @@
                             $desFmt = sprintf('%02d:%02d:%02d', floor($desSeconds/3600), floor(($desSeconds%3600)/60), $desSeconds%60);
                         @endphp
 
-                        <div class="border border-gray-200 rounded-xl p-5 mb-6 bg-gray-50 hover:bg-white transition duration-200">
+                        <div class="border border-gray-200 rounded-lg sm:rounded-xl p-4 sm:p-5 mb-4 sm:mb-6 bg-gray-50 hover:bg-white transition duration-200">
                             {{-- Header Kartu --}}
                             <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
                                 <div class="flex-1">
@@ -208,7 +208,7 @@
                                         <p class="text-gray-600 mb-3">{{ $card->description }}</p>
                                     @endif
 
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm text-gray-700">
                                         <div class="flex items-center">
                                             <svg class="w-4 h-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -351,13 +351,13 @@
         </div>
 
         {{-- Actions --}}
-        <div class="mt-8 flex flex-wrap gap-4 justify-end">
+        <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-end">
             @if($project->status !== 'done')
                 <form action="{{ route('admin.projects.markAsDone', $project->project_id) }}" method="POST" class="inline-block">
                     @csrf
                     @method('PATCH')
-                    <button type="submit" class="bg-gradient-to-r from-green-600 to-emerald-700 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-emerald-800 transition duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-green-600 to-emerald-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:from-green-700 hover:to-emerald-800 transition duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center justify-center text-sm sm:text-base">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                         Tandai Selesai
@@ -368,8 +368,8 @@
                   onsubmit="return confirm('Apakah Anda yakin ingin menghapus project ini?');" class="inline-block">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl hover:from-red-700 hover:to-red-800 transition duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:from-red-700 hover:to-red-800 transition duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center justify-center text-sm sm:text-base">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
                     Hapus Project

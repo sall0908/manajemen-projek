@@ -26,23 +26,19 @@
         <p><strong>Status:</strong> {{ ucfirst($user->status) }}</p>
     </div>
 
-    @if($user->role === 'teamleader')
+    @if($user->role === 'teamlead')
         <h2>Statistik Team Leader</h2>
         <div class="stat-box">
             <div class="stat-number">{{ $cardsCreated }}</div>
             <p>Card Dibuat</p>
         </div>
         <div class="stat-box">
-            <div class="stat-number">{{ $projectsCompleted }}</div>
-            <p>Proyek Selesai</p>
-        </div>
-        <div class="stat-box">
-            <div class="stat-number">{{ isset($projectsCreated) ? $projectsCreated->count() : 0 }}</div>
-            <p>Total Proyek</p>
+            <div class="stat-number">{{ $projectsJoined->count() }}</div>
+            <p>Total Proyek Diikuti</p>
         </div>
 
-        @if(isset($projectsCreated) && $projectsCreated->count() > 0)
-            <h2>Daftar Proyek yang Dibuat</h2>
+        @if(isset($projectsJoined) && $projectsJoined->count() > 0)
+            <h2>Daftar Proyek yang Diikuti</h2>
             <table>
                 <thead>
                     <tr>
@@ -53,12 +49,38 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($projectsJoined as $project)
+                        <tr>
+                            <td>{{ $project->project_name }}</td>
+                            <td>{{ ucfirst(str_replace('_', ' ', $project->status)) }}</td>
+                            <td>{{ $project->cards_count }}</td>
+                            <td>{{ $project->deadline ? \Carbon\Carbon::parse($project->deadline)->format('d M Y') : '-' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+    @elseif($user->role === 'admin')
+        @if(isset($projectsCreated) && $projectsCreated->count() > 0)
+            <h2>Daftar Proyek yang Dibuat</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama Proyek</th>
+                        <th>Status</th>
+                        <th>Jumlah Card</th>
+                        <th>Deadline</th>
+                        <th>Tanggal Dibuat</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach($projectsCreated as $project)
                         <tr>
                             <td>{{ $project->project_name }}</td>
                             <td>{{ ucfirst(str_replace('_', ' ', $project->status)) }}</td>
                             <td>{{ $project->cards_count }}</td>
                             <td>{{ $project->deadline ? \Carbon\Carbon::parse($project->deadline)->format('d M Y') : '-' }}</td>
+                            <td>{{ $project->created_at ? \Carbon\Carbon::parse($project->created_at)->format('d M Y') : '-' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -101,6 +123,30 @@
                             <td>{{ $card->project->project_name ?? '-' }}</td>
                             <td>{{ ucfirst(str_replace('_', ' ', $card->status)) }}</td>
                             <td>{{ $card->sub_tasks_count }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+
+        @if(isset($projectsJoined) && $projectsJoined->count() > 0)
+            <h2>Daftar Proyek yang Diikuti</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama Proyek</th>
+                        <th>Status</th>
+                        <th>Jumlah Card</th>
+                        <th>Deadline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($projectsJoined as $project)
+                        <tr>
+                            <td>{{ $project->project_name }}</td>
+                            <td>{{ ucfirst(str_replace('_', ' ', $project->status)) }}</td>
+                            <td>{{ $project->cards_count }}</td>
+                            <td>{{ $project->deadline ? \Carbon\Carbon::parse($project->deadline)->format('d M Y') : '-' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

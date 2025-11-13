@@ -1,22 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8">
-    <div class="container mx-auto px-4 sm:px-6">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-4 sm:py-8">
+    <div class="container mx-auto px-3 sm:px-4 lg:px-6">
         <div class="max-w-2xl mx-auto">
             {{-- Header Card --}}
-            <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-blue-100">
+            <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 border border-blue-100">
                 <div class="text-center mb-2">
-                    <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
+                    <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
                         Buat Project Baru
                     </h2>
-                    <p class="text-gray-600 mt-2">Isi detail project untuk memulai pekerjaan tim</p>
+                    <p class="text-gray-600 mt-2 text-sm sm:text-base">Isi detail project untuk memulai pekerjaan tim</p>
                 </div>
             </div>
 
             {{-- Form Card --}}
-            <div class="bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
-                <form method="POST" action="{{ route('admin.projects.store') }}" class="space-y-6">
+            <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border border-blue-100">
+                <form method="POST" action="{{ route('admin.projects.store') }}" class="space-y-4 sm:space-y-6">
                     @csrf
 
                     {{-- Nama Project --}}
@@ -28,7 +28,7 @@
                             Nama Project
                         </label>
                         <input type="text" name="project_name" required
-                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
+                            class="w-full border border-gray-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
                     </div>
 
                     {{-- Deskripsi --}}
@@ -40,7 +40,7 @@
                             Deskripsi
                         </label>
                         <textarea name="description" rows="4"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"></textarea>
+                            class="w-full border border-gray-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"></textarea>
                     </div>
 
                     {{-- Difficulty Level --}}
@@ -52,7 +52,7 @@
                             Tingkat Kesulitan
                         </label>
                         <select name="difficulty" required
-                                class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 appearance-none bg-white">
+                                class="w-full border border-gray-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 appearance-none bg-white">
                             <option value="">-- Pilih tingkat kesulitan --</option>
                             <option value="easy" class="text-green-600">Easy</option>
                             <option value="medium" class="text-yellow-600">Medium</option>
@@ -69,7 +69,7 @@
                             Pilih Team Leader
                         </label>
                         <select name="leader_id" required
-                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 appearance-none bg-white">
+                            class="w-full border border-gray-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 appearance-none bg-white">
                             <option value="">-- Pilih team leader --</option>
                             @foreach($leaders as $leader)
                                 <option value="{{ $leader->user_id }}">{{ $leader->full_name }}</option>
@@ -119,15 +119,15 @@
                             Deadline
                         </label>
                         <input type="date" name="deadline" id="deadline" min="{{ date('Y-m-d') }}"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
+                            class="w-full border border-gray-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
                     </div>
 
                     {{-- Submit Button --}}
-                    <div class="text-center pt-6">
+                    <div class="text-center pt-4 sm:pt-6">
                         <button type="submit"
-                            class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold px-8 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-800 transition duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+                            class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold px-6 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:from-blue-700 hover:to-indigo-800 transition duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl text-sm sm:text-base">
                             <span class="flex items-center justify-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Simpan Project

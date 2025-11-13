@@ -1,62 +1,62 @@
 @extends('layouts.designer')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-6 sm:py-10">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-4 sm:py-6 lg:py-10">
+    <div class="container mx-auto px-3 sm:px-4 lg:px-8">
         <!-- Header -->
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl shadow-lg mb-4">
-                <span class="text-2xl text-white">🎨</span>
+        <div class="text-center mb-6 sm:mb-8">
+            <div class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl sm:rounded-2xl shadow-lg mb-3 sm:mb-4">
+                <span class="text-xl sm:text-2xl text-white">🎨</span>
             </div>
-            <h1 class="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent mb-2">Card Saya</h1>
-            <p class="text-gray-600 max-w-2xl mx-auto text-sm">Kelola dan kerjakan semua card yang Anda terima dari TeamLeader</p>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent mb-2">Card Saya</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto text-xs sm:text-sm px-4">Kelola dan kerjakan semua card yang Anda terima dari TeamLeader</p>
         </div>
 
         <!-- Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-xl shadow p-4 border border-purple-100">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div class="bg-white rounded-xl shadow p-3 sm:p-4 border border-purple-100">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs text-gray-500">Total Card</p>
-                        <p class="text-xl font-bold text-purple-700">{{ $cards->count() }}</p>
+                        <p class="text-lg sm:text-xl font-bold text-purple-700">{{ $cards->count() }}</p>
                     </div>
-                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                         <span class="text-purple-600">�</span>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow p-4 border border-purple-100">
+            <div class="bg-white rounded-xl shadow p-3 sm:p-4 border border-purple-100">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs text-gray-500">Dalam Review</p>
-                        <p class="text-xl font-bold text-pink-600">{{ $cards->where('status','review')->count() }}</p>
+                        <p class="text-lg sm:text-xl font-bold text-pink-600">{{ $cards->where('status','review')->count() }}</p>
                     </div>
-                    <div class="w-10 h-10 bg-pink-50 rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-pink-50 rounded-lg flex items-center justify-center">
                         <span class="text-pink-600">�</span>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow p-4 border border-purple-100">
+            <div class="bg-white rounded-xl shadow p-3 sm:p-4 border border-purple-100">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs text-gray-500">Sedang Dikerjakan</p>
-                        <p class="text-xl font-bold text-orange-600">{{ $cards->where('status','in_progress')->count() }}</p>
+                        <p class="text-lg sm:text-xl font-bold text-orange-600">{{ $cards->where('status','in_progress')->count() }}</p>
                     </div>
-                    <div class="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-orange-50 rounded-lg flex items-center justify-center">
                         <span class="text-orange-600">⏳</span>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow p-4 border border-purple-100">
+            <div class="bg-white rounded-xl shadow p-3 sm:p-4 border border-purple-100">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs text-gray-500">Total Proyek</p>
-                        <p class="text-xl font-bold text-indigo-700">{{ $projects->count() }}</p>
+                        <p class="text-lg sm:text-xl font-bold text-indigo-700">{{ $projects->count() }}</p>
                     </div>
-                    <div class="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-50 rounded-lg flex items-center justify-center">
                         <span class="text-indigo-600">�</span>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
 
         <!-- Cards Grid -->
         @if($cards->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 @foreach($cards as $card)
                     <div class="bg-white rounded-2xl shadow-lg border border-purple-100 hover:shadow-xl transition duration-200 overflow-hidden">
                         <div class="p-5 border-b border-purple-50">
