@@ -54,16 +54,10 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($users as $data) {
-            $existing = User::where('email', $data['email'])
-                ->orWhere('username', $data['username'])
-                ->first();
-
-            if ($existing) {
-                $existing->fill($data);
-                $existing->save();
-            } else {
-                User::create($data);
-            }
+            User::updateOrCreate(
+                ['email' => $data['email']], // cek berdasarkan email
+                $data // update field-field lainnya
+            );
         }
     }
 }
