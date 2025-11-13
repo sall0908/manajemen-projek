@@ -219,7 +219,7 @@
             .then(html => {
                 const parser = new DOMParser();
                 const newDoc = parser.parseFromString(html, 'text/html');
-                
+
                 // Update setiap column
                 const columns = ['todo', 'in_progress', 'review', 'done'];
                 columns.forEach(column => {

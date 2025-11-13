@@ -16,6 +16,7 @@ class TimeLog extends Model
         'card_id',
         'sub_task_id',
         'user_id',
+        'help_request_id',
         'start_time',
         'end_time',
         'duration_seconds',
@@ -40,6 +41,11 @@ class TimeLog extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
+
+    public function helpRequest()
+    {
+        return $this->belongsTo(HelpRequest::class, 'help_request_id', 'request_id');
     }
 
     /**

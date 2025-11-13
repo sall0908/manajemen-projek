@@ -18,16 +18,36 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">👥 Anggota Tim</h2>
 
-            @if($project->members->isEmpty())
+            @php
+                $membersList = collect();
+                if (!empty($project->leader)) {
+                    $membersList->push((object)[
+                        'full_name' => $project->leader->full_name ?? ($project->leader->name ?? 'Leader'),
+                        'email' => $project->leader->email ?? null,
+                        'role_label' => 'Leader'
+                    ]);
+                }
+                foreach ($project->members as $m) {
+                    $membersList->push((object)[
+                        'full_name' => $m->full_name ?? ($m->name ?? 'Member'),
+                        'email' => $m->email ?? null,
+                        'role_label' => $m->pivot->role ?? $m->role ?? 'Member'
+                    ]);
+                }
+            @endphp
+
+            @if($membersList->isEmpty())
                 <p class="text-gray-500">Belum ada anggota tim dalam proyek ini.</p>
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @foreach($project->members as $member)
+                    @foreach($membersList as $member)
                         <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                            <h3 class="font-bold text-gray-800">{{ $member->name }}</h3>
-                            <p class="text-sm text-gray-600">{{ $member->email }}</p>
-                            <span class="inline-block mt-2 px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-full">
-                                {{ $member->role }}
+                            <h3 class="font-bold text-gray-800">{{ $member->full_name }}</h3>
+                            @if($member->email)
+                                <p class="text-sm text-gray-600">{{ $member->email }}</p>
+                            @endif
+                            <span class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">
+                                {{ $member->role_label }}
                             </span>
                         </div>
                     @endforeach

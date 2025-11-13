@@ -65,6 +65,9 @@
                                        'bg-green-100 text-green-800')) }}">
                                     {{ ucfirst(str_replace('_', ' ', $req->status)) }}
                                 </span>
+                                    @if(!empty($req->running_seconds) && $req->running_seconds > 0)
+                                        <div class="mt-2 text-xs text-gray-600">Timer: <span class="font-mono" data-seconds="{{ $req->running_seconds }}">{{ gmdate('H:i:s', $req->running_seconds) }}</span></div>
+                                    @endif
                             </div>
                         </div>
 
@@ -119,6 +122,25 @@
                             </div>
                         </form>
 
+                        <!-- Quick actions -->
+                        <div class="mt-3 flex gap-2">
+                            @if($req->status === 'pending')
+                                <form action="{{ route('teamleader.blockers.update', $req->request_id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="status" value="in_progress">
+                                    <button type="submit" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold">▶️ Mulai Kerjakan</button>
+                                </form>
+                            @elseif($req->status === 'in_progress')
+                                <form action="{{ route('teamleader.blockers.update', $req->request_id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="status" value="fixed">
+                                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold">🔧 Tandai Fixed</button>
+                                </form>
+                            @endif
+                        </div>
+
                         @if($req->resolver)
                             <p class="text-xs text-gray-500 mt-3">Diselesaikan oleh: <strong>{{ $req->resolver->full_name }}</strong> pada {{ $req->resolved_at?->format('d M Y H:i') ?? '-' }}</p>
                         @endif
@@ -144,3 +166,20 @@
     </div>
 </div>
 @endsection
+
+    @push('scripts')
+    <script>
+        // Simple timer tick for running blockers
+        document.addEventListener('DOMContentLoaded', function () {
+            const nodes = document.querySelectorAll('[data-seconds]');
+            nodes.forEach(node => {
+                let seconds = parseInt(node.getAttribute('data-seconds') || '0', 10);
+                node.textContent = new Date(seconds * 1000).toISOString().substr(11, 8);
+                setInterval(() => {
+                    seconds += 1;
+                    node.textContent = new Date(seconds * 1000).toISOString().substr(11, 8);
+                }, 1000);
+            });
+        });
+    </script>
+    @endpush

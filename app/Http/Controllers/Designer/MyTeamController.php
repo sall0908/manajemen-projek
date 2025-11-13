@@ -13,7 +13,7 @@ class MyTeamController extends Controller
         // Dapatkan semua projects yang designer-nya adalah user yang login
         $projects = Project::whereHas('members', function ($query) {
             $query->where('project_members.user_id', Auth::id());
-        })->with('members')->get();
+        })->with(['members', 'leader'])->get();
 
         return view('designer.my-team', compact('projects'));
     }

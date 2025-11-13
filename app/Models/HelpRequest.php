@@ -55,4 +55,12 @@ class HelpRequest extends Model
     {
         return $this->belongsTo(SubTask::class, 'subtask_id', 'sub_task_id');
     }
+
+    /**
+     * Time logs associated with this help request (blocker)
+     */
+    public function timeLogs()
+    {
+        return $this->hasMany(\App\Models\TimeLog::class, 'help_request_id', 'request_id');
+    }
 }

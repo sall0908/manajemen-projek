@@ -11,22 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('help_requests', function (Blueprint $table) {
-            $table->id('request_id');
-            $table->unsignedBigInteger('subtask_id')->nullable();
-            $table->integer('user_id'); // Developer or Designer who reported
-            $table->text('issue_description');
-            $table->enum('status', ['pending', 'in_progress', 'fixed', 'completed'])->default('pending');
-            $table->integer('resolved_by')->nullable(); // Team Lead who resolved
-            $table->text('resolution_notes')->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->dateTime('resolved_at')->nullable();
+        if (!Schema::hasTable('help_requests')) {
+            Schema::create('help_requests', function (Blueprint $table) {
+                $table->id('request_id');
+                $table->unsignedBigInteger('subtask_id')->nullable();
+                $table->integer('user_id'); // Developer or Designer who reported
+                $table->text('issue_description');
+                $table->enum('status', ['pending', 'in_progress', 'fixed', 'completed'])->default('pending');
+                $table->integer('resolved_by')->nullable(); // Team Lead who resolved
+                $table->text('resolution_notes')->nullable();
+                $table->timestamp('created_at')->useCurrent();
+                $table->dateTime('resolved_at')->nullable();
 
-            // Foreign keys
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
-            $table->foreign('subtask_id')->references('sub_task_id')->on('sub_tasks')->onDelete('cascade');
-            $table->foreign('resolved_by')->references('user_id')->on('users')->onDelete('set null');
-        });
+                // Foreign keys
+                $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+                $table->foreign('subtask_id')->references('sub_task_id')->on('sub_tasks')->onDelete('cascade');
+                $table->foreign('resolved_by')->references('user_id')->on('users')->onDelete('set null');
+            });
+        }
     }
 
     /**

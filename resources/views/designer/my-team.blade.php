@@ -20,6 +20,7 @@
                     <div class="bg-white rounded-lg shadow-md p-4">
                         <h3 class="font-bold text-gray-800">{{ $project->project_name }}</h3>
                         <p class="text-sm text-gray-600 mb-2">{{ \Illuminate\Support\Str::limit($project->description, 80) }}</p>
+                        <p class="text-xs text-gray-500 mb-2">Leader: {{ $project->leader->full_name ?? '—' }} · Anggota: {{ $project->members->count() }}</p>
                         <a href="{{ route('designer.my-team.show', $project->project_id) }}" class="text-purple-600 hover:underline text-sm font-semibold">Lihat Detail →</a>
                     </div>
                 @endforeach
