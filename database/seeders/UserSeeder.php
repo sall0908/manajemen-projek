@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'username'  => 'admin',
-                'email'     => 'admin@example.com',
+                'email'     => 'admin2@example.com',
                 'full_name' => 'Administrator',
                 'role'      => 'admin',
                 'status'    => 'active',
@@ -54,10 +54,16 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($users as $data) {
-            User::updateOrCreate(
-                ['email' => $data['email']],
-                $data
-            );
+            $existing = User::where('email', $data['email'])
+                ->orWhere('username', $data['username'])
+                ->first();
+
+            if ($existing) {
+                $existing->fill($data);
+                $existing->save();
+            } else {
+                User::create($data);
+            }
         }
     }
 }
